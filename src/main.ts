@@ -1,15 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { NewsSubscriptionService } from './news/news.subscription.service';
+
 async function bootstrap() {
-  await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.REDIS,
-    options: {
-      host: 'localhost',
-      port: 6379,
-    },
-  });
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const newsSubscriptionService = app.get(NewsSubscriptionService);
+  await newsSubscriptionService.initialize();
 }
+
 bootstrap();
